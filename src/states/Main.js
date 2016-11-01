@@ -1,5 +1,7 @@
 import Helpers from 'includes/Helpers';
 import DayCycle from 'objects/DayCycle';
+import LevelData from 'includes/LevelData';
+import Weather from 'objects/Weather';
 
 class Main extends Phaser.State {
 
@@ -29,6 +31,16 @@ class Main extends Phaser.State {
         this.game.cameraOffset = 1024;
         this.game.camera.width = 0;
 
+        //fetch lvl data
+        this.lvlData = new LevelData(this.game);
+        this.game.lvlObjects = this.lvlData.fetch({
+            playerCollision: this.playerCollision,
+            obstaclesCollision: this.obstaclesCollision,
+            interactionCollision: this.interactionCollision,
+            fiendCollision: this.fiendCollision,
+            worldCollision: this.worldCollision,
+            puzzleCollision: this.puzzleCollision
+        });
 
         //create game world bitmap and color it
         let bgBitMap = this.game.add.bitmapData(this.game.width, this.game.height);
@@ -52,6 +64,13 @@ class Main extends Phaser.State {
         //init day night cycle
         this.dayCycle = new DayCycle(this.game, 0);
         this.dayCycle.initMoon(this.moonSprite);
+
+        //weather effects
+        this.weather = new Weather(this.game)
+        this.weather.addRain();
+        if(this.game.fog) {
+            this.weather.addFog();
+        }
     }
 
     update() {
