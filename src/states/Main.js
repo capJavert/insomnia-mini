@@ -204,6 +204,18 @@ class Main extends Phaser.State {
 
                 return false; 
                 break;
+            case 'Fiend': 
+                if(player!=null) {
+                    if(!player.damageBounce) {
+                        player.damageBounce = true;
+                        sprite.playerHit = true;
+                    }
+                } else if(sprite.oType == 'Trap' || sprite2.oType == 'Trap') {
+                    sprite.trapHit = true;
+                }
+
+                return false; 
+                break;
             default:
                 return true;
         }

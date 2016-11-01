@@ -60,7 +60,30 @@ class Fiend extends Sprite {
 	}
 
 	update(playerObject) {
+		//console.log(this.sprite.animations.frameName);
 
+		this.player = playerObject.player;
+		this.sprite.body.velocity.x = 0;
+
+		this.sprite.body.velocity.x = playerObject.getSpeed();
+
+		if(!this.sprite.playerHit && !this.sprite.trapHit) {
+			if(playerObject.player.jumping) {
+				this.sprite.animations.play('high-lurk');
+			} else if(playerObject.player.position.x+600>this.sprite.position.x) {
+				this.sprite.animations.play('low-lurk');
+			} else {
+				this.sprite.animations.play('idle');
+			}
+		} else if(this.sprite.trapHit) {
+			this.sprite.animations.stop();
+			this.sprite.animations.frameName = 'shadow-hand-low-atk2';
+			this.sprite.body.clearShapes();
+
+			this.kill(true);
+		} else {
+			this.forceHit();
+		}
 	}
 
 	//function is called on player collision

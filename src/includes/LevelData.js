@@ -49,8 +49,10 @@ class LevelData {
 
             new Rock(this.game, 2500, -50, 1, collisionGroups.obstaclesCollision),
             new Rock(this.game, 2700, 100, 1, collisionGroups.obstaclesCollision),
-            new Rock(this.game, 4700, 0, 1, collisionGroups.obstaclesCollision),
-            new Rock(this.game, 4900, -40, 1, collisionGroups.obstaclesCollision),
+
+            new Checkpoint(this.game, 3000, 0, 1, collisionGroups.interactionCollision)
+
+            new Fiend(this.game, 3400, -30, 0.8, collisionGroups.fiendCollision),
         ];
 
         lvlObjects.push(new Checkpoint(this.game, 18300, 0, 1, collisionGroups.interactionCollision));
