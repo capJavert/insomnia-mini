@@ -163,6 +163,14 @@ class Main extends Phaser.State {
     }
 
     update() {
+      //back to mainmenu with ESC key
+        if(this.game.cursors.interact.esc.isDown) {
+            this.game.ready = false;
+            this.showLoadingMessage("... Loading, please wait ...", this.mainMenu);
+
+            return;
+        }
+        
        //update every game object
         for (var i = 0; i < this.game.lvlObjects.length; i++) {
             this.game.lvlObjects[i].update(this.player);
