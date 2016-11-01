@@ -44,7 +44,17 @@ class Orb extends Sprite {
 	}
 
 	update(playerObject) {
-		
+		this.sprite.angle += 1;
+		this.sprite.body.velocity.x = 0;
+		this.player = playerObject;
+
+		this.sprite.body.velocity.x = playerObject.getSpeed();
+
+		if(this.sprite.collect && !this.collected) {
+			this.sprite.body.clearShapes();
+			this.kill();
+	    	this.updateOrbs();	
+		}
 	}
 
     //check if object is out of camera view
@@ -65,6 +75,22 @@ class Orb extends Sprite {
     	this.player.heal();
     	//console.log("Orbs", this.game.orbCount);
     }
+
+	moveUp() {
+		if(this.sprite.body!=null) {
+			this.sprite.body.moveUp(this.levitationMove);
+
+			this.game.time.events.add(Phaser.Timer.SECOND*0.5, this.moveDown, this);
+		}
+	}
+
+	moveDown() {
+		if(this.sprite.body!=null) {
+			this.sprite.body.moveDown(this.levitationMove);
+			
+			this.game.time.events.add(Phaser.Timer.SECOND*0.5, this.moveUp, this);
+		}
+	}
 }
 
 export default Orb;

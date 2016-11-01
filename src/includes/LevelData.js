@@ -45,6 +45,8 @@ class LevelData {
         this.game.lvlFillColor = '#354a55';
 
         let lvlObjects = [
+            new Orb(this.game, 1000, 60, 1, collisionGroups.interactionCollision),
+
             new Rock(this.game, 2500, -50, 1, collisionGroups.obstaclesCollision),
             new Rock(this.game, 2700, 100, 1, collisionGroups.obstaclesCollision),
             new Rock(this.game, 4700, 0, 1, collisionGroups.obstaclesCollision),

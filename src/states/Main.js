@@ -3,6 +3,7 @@ import DayCycle from 'objects/DayCycle';
 import LevelData from 'includes/LevelData';
 import Weather from 'objects/Weather';
 import Player from 'objects/Player';
+import MenuButton from 'objects/MenuButton';
 
 class Main extends Phaser.State {
 
@@ -124,6 +125,18 @@ class Main extends Phaser.State {
         this.game.sounds.backgroundWind = this.game.add.audio('background-wind', 0.2, true);
         this.game.sound.setDecodedCallback([this.game.sounds.backgroundRain, this.game.sounds.backgroundRain], this.playSounds, this);
 
+        //orb count display
+        this.orbCountDisplay = new MenuButton(
+            this.game, this.game.width-200, 60, "Orbs collected: "+this.game.orbCount, null, 
+            {
+                font: 'Arial',
+                fontWeight: 'normal',
+                fontSize: 28,
+                fill: '#FFFFFF',
+                align: 'right'
+            }
+        );
+
         //enable movement controls
         this.game.cursors = this.input.keyboard.createCursorKeys();
 
@@ -142,7 +155,10 @@ class Main extends Phaser.State {
         for (var i = 0; i < this.game.lvlObjects.length; i++) {
             this.game.lvlObjects[i].update(this.player);
         }
-        
+
+        //update orb count display
+        this.orbCountDisplay.text.setText("Orbs collected: "+this.game.orbCount);
+
         //update player position
         this.player.update(this.game, this.game.cursors, this.backgroundMid);
     }
@@ -181,6 +197,13 @@ class Main extends Phaser.State {
         }
 
         switch(sprite.oType) {
+            case 'Orb': 
+                if(player!=null) {
+                    sprite.collect = true;
+                }
+
+                return false; 
+                break;
             default:
                 return true;
         }
