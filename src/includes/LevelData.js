@@ -55,7 +55,7 @@ class LevelData {
             new Fiend(this.game, 5300, -50, 0.8, collisionGroups.fiendCollision),
         ];
 
-        lvlObjects.push(new Checkpoint(this.game, 18300, 0, 1, collisionGroups.interactionCollision));
+        lvlObjects.push(new Checkpoint(this.game, 6000, 0, 1, collisionGroups.interactionCollision));
 
         return lvlObjects;
     }

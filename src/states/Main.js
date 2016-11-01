@@ -101,6 +101,9 @@ class Main extends Phaser.State {
             this.game.lvlObjects[i].setContact(this.player.material);
         }
 
+        //add endgame listener on last object in lvl array
+        this.game.lvlObjects[this.game.lvlObjects.length-1].sprite.oType = 'EndGame';
+
         //init day night cycle
         this.dayCycle = new DayCycle(this.game, 0);
         this.dayCycle.initMoon(this.moonSprite);
@@ -170,10 +173,32 @@ class Main extends Phaser.State {
 
             return;
         }
-        
+
        //update every game object
         for (var i = 0; i < this.game.lvlObjects.length; i++) {
             this.game.lvlObjects[i].update(this.player);
+        }
+
+        //check if game is finished
+        if(this.game.end) {
+            this.game.ready = false;
+
+            if(this.game.lvlId==this.game.lastLvlId) {
+                this.showLoadingMessage("... Wake Up!! ...", this.gameEnd);
+            } else {
+                this.showLoadingMessage("... Loading, please wait ...", this.gameEnd);
+            }
+
+            return;
+        }
+
+        //check if player is dead
+        if(!this.game.health) {
+            this.game.ready = false;
+
+            this.showLoadingMessage("... Loading, please wait ...", this.gameOver);
+
+            return;
         }
 
         //update health display
@@ -220,6 +245,14 @@ class Main extends Phaser.State {
         }
 
         switch(sprite.oType) {
+           case 'EndGame': 
+                if(player!=null) {
+                    this.player.player.animations.play('idle');
+                    this.game.end = true;
+                }
+
+                return true; 
+                break;
             case 'Orb': 
                 if(player!=null) {
                     sprite.collect = true;
