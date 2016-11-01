@@ -88,6 +88,18 @@ class Main extends Phaser.State {
             'background-bottom'
         );
 
+        //render lvl objects
+        //set collision rules for game objects
+        for (var i = 0; i < this.game.lvlObjects.length; i++) {
+            this.game.lvlObjects[i].render();
+            this.game.lvlObjects[i].collides([this.playerCollision], this.game.lvlObjects[i].hitPlayer, this.onHit, this);
+            this.game.lvlObjects[i].collides([this.obstaclesCollision, this.worldCollision, this.interactionCollision], this.game.lvlObjects[i].hitSprite);
+            if(this.game.lvlObjects[i].oType!='PuzzleObstacle') {
+                this.game.lvlObjects[i].collides([this.puzzleCollision], this.game.lvlObjects[i].hitSprite);
+            }
+            this.game.lvlObjects[i].setContact(this.player.material);
+        }
+
         //init day night cycle
         this.dayCycle = new DayCycle(this.game, 0);
         this.dayCycle.initMoon(this.moonSprite);
@@ -126,6 +138,11 @@ class Main extends Phaser.State {
     }
 
     update() {
+       //update every game object
+        for (var i = 0; i < this.game.lvlObjects.length; i++) {
+            this.game.lvlObjects[i].update(this.player);
+        }
+        
         //update player position
         this.player.update(this.game, this.game.cursors, this.backgroundMid);
     }

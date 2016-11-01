@@ -44,7 +44,14 @@ class LevelData {
         this.game.fog = true;
         this.game.lvlFillColor = '#354a55';
 
-        let lvlObjects = [];
+        let lvlObjects = [
+            new Rock(this.game, 2500, -50, 1, collisionGroups.obstaclesCollision),
+            new Rock(this.game, 2700, 100, 1, collisionGroups.obstaclesCollision),
+            new Rock(this.game, 4700, 0, 1, collisionGroups.obstaclesCollision),
+            new Rock(this.game, 4900, -40, 1, collisionGroups.obstaclesCollision),
+        ];
+
+        lvlObjects.push(new Checkpoint(this.game, 18300, 0, 1, collisionGroups.interactionCollision));
 
         return lvlObjects;
     }
