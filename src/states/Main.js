@@ -107,6 +107,11 @@ class Main extends Phaser.State {
             this.weather.addFog();
         }
 
+        //background sounds
+        this.game.sounds.backgroundRain = this.game.add.audio('background-rain', 1, true);
+        this.game.sounds.backgroundWind = this.game.add.audio('background-wind', 0.2, true);
+        this.game.sound.setDecodedCallback([this.game.sounds.backgroundRain, this.game.sounds.backgroundRain], this.playSounds, this);
+
         //enable movement controls
         this.game.cursors = this.input.keyboard.createCursorKeys();
 
