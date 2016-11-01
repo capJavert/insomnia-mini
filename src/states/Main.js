@@ -1,7 +1,57 @@
+import Helpers from 'includes/Helpers';
+import DayCycle from 'objects/DayCycle';
+
 class Main extends Phaser.State {
 
     create() {
-        alert("Helloo from the other side!");
+        //game progression variables
+        this.game.health = 4;
+        this.game.progress = 0;
+        this.game.orbCount = 0;
+        this.game.checkpoint = 0;
+        this.game.debugMode = false;
+        this.game.ready = true;
+        this.game.end = false;
+        this.game.soundsDecoded = false;
+        this.game.sounds = new Object();
+        this.helpers = new Helpers(this.game);
+
+        //set up world and physics
+        //left 1024 offset for objects swap
+        this.game.world.setBounds(-1024, 0, this.game.width+1024, this.game.height);
+        this.game.physics.startSystem(Phaser.Physics.P2JS);
+        this.game.physics.p2.restitution = 0.0;
+        this.game.physics.p2.setImpactEvents(true);
+        this.game.physics.p2.gravity.y = 1800;
+        this.game.physics.p2.setPostBroadphaseCallback(this.handleContact, this);
+
+        //set up camera and add offset
+        this.game.cameraOffset = 1024;
+        this.game.camera.width = 0;
+
+
+        //create game world bitmap and color it
+        let bgBitMap = this.game.add.bitmapData(this.game.width, this.game.height);
+        bgBitMap.ctx.rect(0, 0, this.game.width, this.game.height);
+        bgBitMap.ctx.fillStyle = this.game.lvlFillColor;
+        bgBitMap.ctx.fill();
+        this.backgroundSprite = this.game.add.sprite(0, 0, bgBitMap);
+
+        //create sun and moon 
+        this.moonSprite = this.game.add.sprite(this.game.width - (this.game.width / 4), 150*this.game.lvlId, 'moon');
+        this.moonSprite.visible = false;
+
+        //create game backgrounds
+        this.backgroundMid = this.game.add.tileSprite(0, 
+            this.game.height - this.game.cache.getImage('background-mid-lvl'+this.game.lvlId).height, 
+            this.game.width, 
+            this.game.cache.getImage('background-mid-lvl'+this.game.lvlId).height, 
+            'background-mid-lvl'+this.game.lvlId
+        );
+
+        //init day night cycle
+        this.dayCycle = new DayCycle(this.game, 0);
+        this.dayCycle.initMoon(this.moonSprite);
     }
 
     update() {
