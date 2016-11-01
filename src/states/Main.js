@@ -2,6 +2,7 @@ import Helpers from 'includes/Helpers';
 import DayCycle from 'objects/DayCycle';
 import LevelData from 'includes/LevelData';
 import Weather from 'objects/Weather';
+import Player from 'objects/Player';
 
 class Main extends Phaser.State {
 
@@ -30,6 +31,14 @@ class Main extends Phaser.State {
         //set up camera and add offset
         this.game.cameraOffset = 1024;
         this.game.camera.width = 0;
+
+        //collision groups
+        this.playerCollision = this.game.physics.p2.createCollisionGroup();
+        this.obstaclesCollision = this.game.physics.p2.createCollisionGroup();
+        this.interactionCollision = this.game.physics.p2.createCollisionGroup();
+        this.fiendCollision = this.game.physics.p2.createCollisionGroup();
+        this.puzzleCollision = this.game.physics.p2.createCollisionGroup();
+        this.worldCollision = this.game.physics.p2.createCollisionGroup();
 
         //collision with world bounds
         this.game.physics.p2.updateBoundsCollisionGroup();
@@ -64,6 +73,13 @@ class Main extends Phaser.State {
             'background-mid-lvl'+this.game.lvlId
         );
 
+        //create player
+        this.player = new Player(this.game, 150, this.game.height-95);
+        this.player.setCollisionGroup(this.playerCollision);
+
+        //set collision rules for player
+        this.player.collides([this.obstaclesCollision, this.worldCollision, this.interactionCollision, this.fiendCollision, this.puzzleCollision], this.player.hitSprite);
+
         //create ground fog 
         this.backgroundBottom = this.game.add.tileSprite(0, 
             this.game.height - this.game.cache.getImage('background-bottom').height, 
@@ -90,10 +106,23 @@ class Main extends Phaser.State {
         if(this.game.fog) {
             this.weather.addFog();
         }
+
+        //enable movement controls
+        this.game.cursors = this.input.keyboard.createCursorKeys();
+
+        //interactions controls
+        this.game.cursors.interact = {
+                a: this.input.keyboard.addKey(Phaser.Keyboard.A),
+                q: this.input.keyboard.addKey(Phaser.Keyboard.Q),
+                esc: this.input.keyboard.addKey(Phaser.Keyboard.ESC)
+        };
+
+        this.game.camera.follow(this.player.sprite);
     }
 
     update() {
-
+        //update player position
+        this.player.update(this.game, this.game.cursors, this.backgroundMid);
     }
 
     handleContact(body1, body2) {
