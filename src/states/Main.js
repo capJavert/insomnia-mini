@@ -137,6 +137,18 @@ class Main extends Phaser.State {
             }
         );
 
+        //health display
+        this.healthDisplay = new MenuButton(
+            this.game, 200, 60, "Lives: "+this.game.health, null, 
+            {
+                font: 'Arial',
+                fontWeight: 'normal',
+                fontSize: 28,
+                fill: '#FFFFFF',
+                align: 'left'
+            }
+        );
+
         //enable movement controls
         this.game.cursors = this.input.keyboard.createCursorKeys();
 
@@ -155,6 +167,9 @@ class Main extends Phaser.State {
         for (var i = 0; i < this.game.lvlObjects.length; i++) {
             this.game.lvlObjects[i].update(this.player);
         }
+
+        //update health display
+        this.healthDisplay.text.setText("Lives: "+this.game.health);
 
         //update orb count display
         this.orbCountDisplay.text.setText("Orbs collected: "+this.game.orbCount);
