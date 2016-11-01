@@ -1,7 +1,7 @@
 class Main extends Phaser.State {
 
     create() {
-
+        alert("Helloo from the other side!");
     }
 
     update() {

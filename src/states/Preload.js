@@ -61,7 +61,9 @@ class Preload extends Phaser.State {
 	}
 
 	create() {
-
+		this.game.lvlId = 1;
+		//state to start after game assets are loaded
+		this.game.state.start("Main");
 	}
 
 }
