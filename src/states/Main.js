@@ -1,9 +1,9 @@
-import Helpers from 'includes/Helpers';
 import DayCycle from 'objects/DayCycle';
-import LevelData from 'includes/LevelData';
 import Weather from 'objects/Weather';
 import Player from 'objects/Player';
+import Helpers from 'includes/Helpers';
 import MenuButton from 'objects/MenuButton';
+import LevelData from 'includes/LevelData';
 
 class Main extends Phaser.State {
 
@@ -80,7 +80,7 @@ class Main extends Phaser.State {
 
         //set collision rules for player
         this.player.collides([this.obstaclesCollision, this.worldCollision, this.interactionCollision, this.fiendCollision, this.puzzleCollision], this.player.hitSprite);
-
+    
         //create ground fog 
         this.backgroundBottom = this.game.add.tileSprite(0, 
             this.game.height - this.game.cache.getImage('background-bottom').height, 
@@ -166,7 +166,7 @@ class Main extends Phaser.State {
     }
 
     update() {
-      //back to mainmenu with ESC key
+        //back to mainmenu with ESC key
         if(this.game.cursors.interact.esc.isDown) {
             this.game.ready = false;
             this.showLoadingMessage("... Loading, please wait ...", this.mainMenu);
@@ -174,7 +174,16 @@ class Main extends Phaser.State {
             return;
         }
 
-       //update every game object
+        //update orb count display
+        this.orbCountDisplay.text.setText("Orbs collected: "+this.game.orbCount);
+
+        //update health display
+        this.healthDisplay.text.setText("Lives: "+this.game.health);
+
+        //paralax scroll ground fog
+        this.backgroundBottom.tilePosition.x -= 3;
+
+        //update every game object
         for (var i = 0; i < this.game.lvlObjects.length; i++) {
             this.game.lvlObjects[i].update(this.player);
         }
@@ -200,12 +209,6 @@ class Main extends Phaser.State {
 
             return;
         }
-
-        //update health display
-        this.healthDisplay.text.setText("Lives: "+this.game.health);
-
-        //update orb count display
-        this.orbCountDisplay.text.setText("Orbs collected: "+this.game.orbCount);
 
         //update player position
         this.player.update(this.game, this.game.cursors, this.backgroundMid);
@@ -245,7 +248,7 @@ class Main extends Phaser.State {
         }
 
         switch(sprite.oType) {
-           case 'EndGame': 
+            case 'EndGame': 
                 if(player!=null) {
                     this.player.player.animations.play('idle');
                     this.game.end = true;
@@ -281,6 +284,33 @@ class Main extends Phaser.State {
 
                 return false; 
                 break;
+            case 'PuzzleObstacle': 
+                if(this.game.cursors.interact.a.isDown) {
+                    if(!this.player.drag) {
+                        sprite.isFollowingPlayer = true;
+                        this.player.drag = sprite;
+                    }
+                } else {
+                    this.player.drag = false;
+                    sprite.isFollowingPlayer = false;
+                }
+
+                if(this.player.touchingDown()) {
+                    return false;
+                } else {
+                    return true;
+                }
+                
+                break;
+            case 'Spikes': 
+                if(player!=null) {
+                    if(!player.damageBounce) {
+                        player.damageBounce = true;
+                    }
+                }
+
+                return false; 
+                break; 
             case 'Checkpoint': 
                 //set checkpoint to current game progress
                 if(player!=null) {
@@ -296,6 +326,7 @@ class Main extends Phaser.State {
                 }
 
                 return false;
+                break;
             default:
                 return true;
         }

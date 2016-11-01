@@ -13,6 +13,7 @@ class GameTitle extends Phaser.State {
 
 		//buttons
 	    this.play = new MenuButton(this.game, this.game.width/2, this.logo.position.y+this.logo.height+100, "Play", this.startGame);
+	    this.controls = new MenuButton(this.game, this.game.width/2, this.play.position.y+this.play.height+20, "Controls", this.Controls);
 	}
 
 	startGame() {

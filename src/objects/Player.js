@@ -4,8 +4,8 @@ import Helpers from 'includes/Helpers';
 class Player {
 
     //init player
-    constructor(game, x, y){
-        this.game = game;
+	constructor(game, x, y){
+		this.game = game;
         this.oType = 'Player';
         this.sounds = new Object();
 
@@ -55,9 +55,9 @@ class Player {
         this.sounds.drop = this.game.add.audio('girl-drop', 0.7, false);
         this.sounds.move = this.game.add.audio('girl-move', 0.1, true);
         this.sounds.boost = this.game.add.audio('girl-boost', 0.6, false);
-    }
+	}
 
-    update(game, cursors, background) {
+	update(game, cursors, background) {
         // Modify movement while mid air
         if(!this.checkIfCanJump()) {
             this.modifier = 1.1;
@@ -153,7 +153,7 @@ class Player {
             }
             this.player.body.offset.y = 10;
         }
-    } 
+	} 
 
     //check if player is jumping
     checkIfCanJump() {    

@@ -33,7 +33,27 @@ class PuzzleObstacle extends Sprite {
 	}
 
 	update(playerObject) {
+		this.sprite.body.velocity.x = 0;
 
+		if(!this.sprite.isFollowingPlayer) {
+			this.sprite.body.velocity.x = playerObject.getSpeed();
+		}
+
+		if(this.sprite.isFollowingPlayer && playerObject.touchingDown()) {
+			this.followPlayer();
+		}
+	}
+
+	followPlayer() {
+		if(this.game.cursors.interact.a.isDown) {
+			if (this.game.cursors.left.isDown && this.sprite.position.x>200) {
+				this.sprite.body.moveLeft(400);
+	        } else if (this.game.cursors.right.isDown && this.game.width/3>this.sprite.position.x-this.sprite.width/2) {
+	            this.sprite.body.moveRight(400);
+	        }
+		} else {
+			this.sprite.isFollowingPlayer = false;
+		}
 	}
 }
 

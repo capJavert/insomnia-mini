@@ -45,17 +45,47 @@ class LevelData {
         this.game.lvlFillColor = '#354a55';
 
         let lvlObjects = [
-            new Orb(this.game, 1000, 60, 1, collisionGroups.interactionCollision),
-
             new Rock(this.game, 2500, -50, 1, collisionGroups.obstaclesCollision),
             new Rock(this.game, 2700, 100, 1, collisionGroups.obstaclesCollision),
+            new Rock(this.game, 4700, 0, 1, collisionGroups.obstaclesCollision),
+            new Rock(this.game, 4900, -40, 1, collisionGroups.obstaclesCollision),
 
-            new Checkpoint(this.game, 3200, 0, 1, collisionGroups.interactionCollision, "Hold <A> and Move"),
-            new Trap(this.game, 3200, 0, 1, collisionGroups.interactionCollision),
-            new Fiend(this.game, 5300, -50, 0.8, collisionGroups.fiendCollision),
+            new Checkpoint(this.game, 5400, 0, 1, collisionGroups.interactionCollision),
+            new Rock(this.game, 5900, 0, 1, collisionGroups.obstaclesCollision),
+            new Orb(this.game, 5900, 320, 1, collisionGroups.interactionCollision),
+            new Spikes(this.game, 6300, 0, 1, collisionGroups.obstaclesCollision), 
+            new Rock(this.game, 6700, 0, 1, collisionGroups.obstaclesCollision),
+            new Orb(this.game, 6700, 320, 1, collisionGroups.interactionCollision),
+            new Spikes(this.game, 7100, 0, 1, collisionGroups.obstaclesCollision), 
+            new Rock(this.game, 7500, 0, 1, collisionGroups.obstaclesCollision),
+            new Orb(this.game, 7500, 320, 1, collisionGroups.interactionCollision),
+
+            new Rock(this.game, 8200, 100, 1, collisionGroups.obstaclesCollision),
+            new Rock(this.game, 8300, 160, 1, collisionGroups.obstaclesCollision),  
+            new Rock(this.game, 8400, 220, 1, collisionGroups.obstaclesCollision),
+            new Rock(this.game, 8400, 100, 1, collisionGroups.obstaclesCollision),
+
+            new Checkpoint(this.game, 9300, 0, 1, collisionGroups.interactionCollision, "Hold <A> to Move blocks"),
+            new PuzzleObstacle(this.game, 10200, -400, 1, collisionGroups.puzzleCollision),
+            new PuzzleObstacle(this.game, 10700, -200, 1, collisionGroups.puzzleCollision),
+            new PuzzleObstacle(this.game, 11200, -300, 1, collisionGroups.puzzleCollision),
+
+            new Rock(this.game, 12200, 500, 1, collisionGroups.obstaclesCollision),
+            new Rock(this.game, 12200, 250, 1, collisionGroups.obstaclesCollision),
+            new Rock(this.game, 12200, 100, 1, collisionGroups.obstaclesCollision),
+            new Fiend(this.game, 12700, -30, 0.8, collisionGroups.fiendCollision),
+
+            new Checkpoint(this.game, 14000, 0, 1, collisionGroups.interactionCollision, "Hold <A> and Move"),
+            new Trap(this.game, 14000, 0, 1, collisionGroups.interactionCollision),
+            new Fiend(this.game, 16000, -50, 0.8, collisionGroups.fiendCollision),
         ];
 
-        lvlObjects.push(new Checkpoint(this.game, 6000, 0, 1, collisionGroups.interactionCollision));
+        //apply generators
+        lvlObjects = this.helpers.linearOrbGenerator(collisionGroups.interactionCollision, lvlObjects, 4, 960, 70, 360);
+        lvlObjects = this.helpers.linearOrbGenerator(collisionGroups.interactionCollision, lvlObjects, 3, 3160, 70, 360);
+        lvlObjects = this.helpers.linearOrbGenerator(collisionGroups.interactionCollision, lvlObjects, 5, 16500, 70, 360);
+
+        lvlObjects.push(new Checkpoint(this.game, 18300, 0, 1, collisionGroups.interactionCollision));
 
         return lvlObjects;
     }
