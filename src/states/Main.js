@@ -31,6 +31,9 @@ class Main extends Phaser.State {
         this.game.cameraOffset = 1024;
         this.game.camera.width = 0;
 
+        //collision with world bounds
+        this.game.physics.p2.updateBoundsCollisionGroup();
+
         //fetch lvl data
         this.lvlData = new LevelData(this.game);
         this.game.lvlObjects = this.lvlData.fetch({
@@ -61,9 +64,25 @@ class Main extends Phaser.State {
             'background-mid-lvl'+this.game.lvlId
         );
 
+        //create ground fog 
+        this.backgroundBottom = this.game.add.tileSprite(0, 
+            this.game.height - this.game.cache.getImage('background-bottom').height, 
+            this.game.width, 
+            this.game.cache.getImage('background-bottom').height, 
+            'background-bottom'
+        );
+
         //init day night cycle
         this.dayCycle = new DayCycle(this.game, 0);
         this.dayCycle.initMoon(this.moonSprite);
+
+        //apply day night shading 
+        this.dayCycle.initShading(backgroundSprites);
+        let backgroundSprites = [
+            {sprite: this.backgroundSprite, from: 0x1f2a27, to: 0xB2DDC8},
+            {sprite: this.backgroundMid, from: 0x283632, to: 0x8BBCAC},
+            {sprite: this.backgroundBottom, from: 0x283632, to: 0x8BBCAC}
+        ];
 
         //weather effects
         this.weather = new Weather(this.game)
