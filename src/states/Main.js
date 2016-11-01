@@ -216,6 +216,30 @@ class Main extends Phaser.State {
 
                 return false; 
                 break;
+            case 'Trap': 
+                if(this.game.cursors.interact.a.isDown) {
+                    sprite.isFollowingPlayer = true;
+                } else {
+                    sprite.isFollowingPlayer = false;
+                }
+
+                return false; 
+                break;
+            case 'Checkpoint': 
+                //set checkpoint to current game progress
+                if(player!=null) {
+                    if(this.game.checkpoint<this.game.progress) {
+                        sprite.showHint = true;
+                        this.clearObjectArray();
+                    }
+                    this.game.checkpoint = this.game.progress;
+                    if(this.player.stunned) {
+                        sprite.showHint = true;
+                        this.player.checkpointReached = true;
+                    }
+                }
+
+                return false;
             default:
                 return true;
         }
